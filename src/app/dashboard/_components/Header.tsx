@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
@@ -17,6 +17,10 @@ export function Header() {
     // Implement logout logic
     console.log("Logout clicked");
   };
+
+  useEffect(() => {
+    setCredits(10);
+  }, []);
 
   return (
     <header className="border-b">
