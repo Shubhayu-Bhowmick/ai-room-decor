@@ -15,6 +15,20 @@
       "when": 1736103067653,
       "tag": "0001_amusing_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736507613961,
+      "tag": "0002_dashing_speed_demon",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736507635304,
+      "tag": "0003_mysterious_midnight",
+      "breakpoints": true
     }
   ]
 }

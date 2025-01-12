@@ -11,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ResultDialog } from "./_components/result-dialog";
+import { LoadingOverlay } from "./_components/loading-overlay";
 
 interface FormData {
   imageUrl: string | null;
@@ -37,32 +39,32 @@ const designStyles = [
   {
     id: "modern",
     name: "Modern",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/modern.png",
   },
   {
     id: "industrial",
     name: "Industrial",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/indutrial.png",
   },
   {
     id: "bohemian",
     name: "Bohemian",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/bohemian.png",
   },
   {
     id: "traditional",
     name: "Traditional",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/traditional.png",
   },
   {
     id: "rustic",
     name: "Rustic",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/rustic.png",
   },
   {
     id: "minimalist",
     name: "Minimalist",
-    image: "/placeholder.svg?height=200&width=300",
+    image: "/minimalist.png",
   },
 ];
 
@@ -76,6 +78,9 @@ export default function FormPage() {
   });
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
+  const [showResult, setShowResult] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -145,6 +150,8 @@ export default function FormPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsGenerating(true);
+
     try {
       // Send the form data to the API
       const response = await fetch("/api/redesign-room/", {
@@ -159,6 +166,7 @@ export default function FormPage() {
       interface RedesignRoomResponse {
         success: boolean;
         message: string;
+        modifiedImageUrl: string; // Include the modified image URL
       }
 
       // Parse the response
@@ -166,6 +174,9 @@ export default function FormPage() {
 
       if (response.ok && data.success) {
         console.log("API Response:", data.message);
+        setGeneratedImage(data.modifiedImageUrl);
+        setIsGenerating(false);
+        setShowResult(true);
       } else {
         console.error("API Error:", data.message);
       }
@@ -181,7 +192,7 @@ export default function FormPage() {
   return (
     <div className="container mx-auto max-w-6xl py-8 px-4">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-purple-600 mb-4">
+        <h1 className="text-4xl font-bold text-orange-600 mb-4">
           Experience the Magic of AI Remodeling
         </h1>
         <p className="text-lg text-gray-600">
@@ -305,7 +316,7 @@ export default function FormPage() {
             <Button
               type="submit"
               disabled={uploading}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white py-6 text-lg"
+              className="w-full bg-orange-600 hover:orange-700 text-white py-6 text-lg"
             >
               {uploading ? "Uploading..." : "Generate"}
             </Button>
@@ -316,6 +327,17 @@ export default function FormPage() {
           </p>
         </div>
       </form>
+      {isGenerating && <LoadingOverlay />}
+      {formData.imageUrl && (
+        <ResultDialog
+          isOpen={showResult}
+          onClose={() => setShowResult(false)}
+          originalImage={formData.imageUrl}
+          generatedImage={
+            generatedImage || "/placeholder.svg?height=600&width=800"
+          }
+        />
+      )}
     </div>
   );
 }

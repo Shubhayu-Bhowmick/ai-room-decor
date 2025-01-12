@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+//import { LogOut } from "lucide-react";
+import Link from "next/link";
 
 export function Header() {
   const [credits, setCredits] = useState(5);
@@ -13,11 +13,6 @@ export function Header() {
     console.log("Buy credits clicked");
   };
 
-  const handleLogout = () => {
-    // Implement logout logic
-    console.log("Logout clicked");
-  };
-
   useEffect(() => {
     setCredits(10);
   }, []);
@@ -25,16 +20,11 @@ export function Header() {
   return (
     <header className="border-b">
       <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/placeholder.svg?height=32&width=32"
-            alt="AI Room Design Logo"
-            width={32}
-            height={32}
-            className="rounded-lg"
-          />
-          <span className="text-xl font-bold">AI Room Design</span>
-        </div>
+        <Link href="/dashboard">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold">AI Room Design</span>
+          </div>
+        </Link>
 
         <Button
           variant="ghost"
@@ -49,10 +39,6 @@ export function Header() {
             <span className="text-sm font-medium">Credits:</span>
             <span className="text-sm font-bold">{credits}</span>
           </div>
-          <Button variant="ghost" size="icon" onClick={handleLogout}>
-            <LogOut className="h-5 w-5" />
-            <span className="sr-only">Logout</span>
-          </Button>
         </div>
       </div>
     </header>
